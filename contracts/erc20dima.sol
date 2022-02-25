@@ -40,6 +40,7 @@ contract ERC20Dima {
         mContractOwner = msg.sender;
         //передаем все токены владельцу контракта
         mint(msg.sender, initialSupply);
+        
     }
 
     //////// View functions /////////////////
