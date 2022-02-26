@@ -11,8 +11,73 @@ import "hardhat-contract-sizer";
 
 dotenv.config();
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
+//так можно посмотреть контракт erc20dima
+//https://rinkeby.etherscan.io/address/0xa2aaE6F6cBd2D7A8F465eF194f5812d8FbF6899b
+//И  токен
+//https://rinkeby.etherscan.io/token/0xa2aae6f6cbd2d7a8f465ef194f5812d8fbf6899b
+
+const contractAddr = '0xa2aaE6F6cBd2D7A8F465eF194f5812d8FbF6899b';
+
+
+//Написать таски на transfer, transferFrom, approve
+//npx hardhat transfer --network rinkeby --key PRIVATE_KEY --to 0x8BBc205Ec38F6AcA8dA9e82Cbfe76662A5E0B987 --value 50
+task("transfer", "transfer")
+  .addParam("key", "Your private key")
+  .addParam("to", "To")
+  .addParam("value", "Value")
+  .setAction(async (taskArgs, hre) => {
+
+    const abi = [
+      "function transfer(address _to, uint256 _value) public returns (bool success)"
+    ];
+    const provider = new hre.ethers.providers.AlchemyProvider("rinkeby");
+    const signer = new hre.ethers.Wallet(taskArgs.key, provider);
+    const erc20dima = new hre.ethers.Contract(contractAddr, abi, signer);
+    
+    let success = await erc20dima.transfer(taskArgs.to, taskArgs.value);
+    console.log('transfer: ', success);
+  });
+
+
+//npx hardhat transferFrom --network rinkeby --key PRIVATE_KEY --from 0x8BBc205Ec38F6AcA8dA9e82Cbfe76662A5E0B987  --to 0xa2aaE6F6cBd2D7A8F465eF194f5812d8FbF6899b  --value 50
+task("transferFrom", "transferFrom")
+  .addParam("key", "Your private key")
+  .addParam("from", "From")
+  .addParam("to", "To")
+  .addParam("value", "Value")
+  .setAction(async (taskArgs, hre) => {
+
+    const abi = [
+      "function transferFrom(address _from, address _to, uint256 _value ) public returns (bool success)"
+    ];
+    const provider = new hre.ethers.providers.AlchemyProvider("rinkeby");
+    const signer = new hre.ethers.Wallet(taskArgs.key, provider);
+    const erc20dima = new hre.ethers.Contract(contractAddr, abi, signer);
+    
+    let success = await erc20dima.transferFrom(taskArgs.from, taskArgs.to, taskArgs.value);
+    console.log('transferFrom: ', success);
+  });
+
+  //npx hardhat approve --network rinkeby --key PRIVATE_KEY --spender 0x8BBc205Ec38F6AcA8dA9e82Cbfe76662A5E0B987 --value 200
+  task("approve", "approve")
+  .addParam("key", "Your private key")
+  .addParam("spender", "Spender")
+  .addParam("value", "Value")
+  .setAction(async (taskArgs, hre) => {
+
+    const abi = [
+      "function approve(address _spender, uint256 _value) public returns (bool success)"
+    ];
+    const provider = new hre.ethers.providers.AlchemyProvider("rinkeby");
+    const signer = new hre.ethers.Wallet(taskArgs.key, provider);
+    const erc20dima = new hre.ethers.Contract(contractAddr, abi, signer);
+    
+    let success = await erc20dima.approve(taskArgs.spender, taskArgs.value);
+    console.log('approve: ', success);
+  });
+
+
+// This is a sample Hardhat task
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
@@ -20,6 +85,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
     console.log(account.address);
   }
 });
+
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -47,5 +113,7 @@ const config: HardhatUserConfig = {
   },
 
 };
+
+
 
 export default config;
