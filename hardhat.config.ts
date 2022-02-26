@@ -8,6 +8,7 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-contract-sizer";
 
+
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -26,14 +27,16 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   networks: {
-    ropsten: {
-      url: process.env.ROPSTEN_URL || "",
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+
+    rinkeby: {
+      url: process.env.RENKEBY_URL || '',
+      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-    hardhat: {
+
+    //обход ошибки
+    /*hardhat: {
       initialBaseFeePerGas: 0
-    },      
+    },   */
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
@@ -42,7 +45,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
-  
+
 };
 
 export default config;
